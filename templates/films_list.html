@@ -10,6 +10,18 @@
               <div class="card-body">
                 <h5 class="card-title">{{ film.name }}</h5>
                 <p class="card-text">
+                  {{ film.genre }}
+                </p>
+                <p class="card-text">
+                  Режиссер: {{ film.director }}
+                </p>
+                <p class="card-text">
+                  Рейтинг Афиши: {{ film.afisha_rating }}
+                </p>
+                <p class="card-text">
+                  <a href="https://www.afisha.ru{{ film.afisha_link }}" target="_blank">Афиша</a>
+                </p>
+                <p class="card-text">
                   {{ film.desc_start }}
                   <div class="collapse" id="collapseDesc{{ loop.index }}">
                     {{ film.desc_all }}

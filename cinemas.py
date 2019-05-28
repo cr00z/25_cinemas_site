@@ -34,17 +34,18 @@ def parse_afisha_list(raw_html):
     afisha_list = []
     for film_meta in film_tags:
         film_desc = film_meta.findNext('meta', itemprop='description')['content']
-        sentence_delimiter_pos = re.search(r'\.', film_desc) #r'\. |\.\n|\? |\?\n|! |!\n', film_desc).end()
-        if sentence_delimiter_pos is None:
+        sentence_delimiter_pos = film_desc.find('. ')
+        if sentence_delimiter_pos == -1:
             sentence_delimiter_pos = len(film_desc)
-        else:
-            sentence_delimiter_pos = sentence_delimiter_pos.end()
         film_content = {
             'name': film_meta['content'],
             'image': film_meta.findNext('meta', itemprop='image')['content'],
             'director': film_meta.findNext('meta', itemprop='director')['content'],
-            'desc_start': film_desc[:sentence_delimiter_pos],
-            'desc_all': film_desc[sentence_delimiter_pos:]
+            'desc_start': film_desc[:sentence_delimiter_pos+2],
+            'desc_all': film_desc[sentence_delimiter_pos+2:],
+            'afisha_link': film_meta.findNext('a')['href'],
+            'genre': film_meta.findNext('span').string,
+            'afisha_rating': film_meta.findNext('div', attrs={'class' : 'card__actions'}).contents[0] # TODO:
         }
         afisha_list.append(film_content)
     return afisha_list
