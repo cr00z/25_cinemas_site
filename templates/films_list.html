@@ -4,33 +4,33 @@
     <div class="row">
       <div class="col">
         <div class="card-columns">
-          {% for film in afisha_list %}
+          {% for film in movies_list %}
             <div class="card">
               <img src="{{ film.image }}" class="card-img-top" alt="{{ film.name }}">
               <div class="card-body">
                 <h5 class="card-title">{{ film.name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ film.genre }}</h6>
+                <p class="card-text"><small class="text-muted">Режиссер: {{ film.director }}</small></p>
+                {% if film.afisha_rating %}
+                  <p class="card-text">Рейтинг Афиши: {{ film.afisha_rating }}</p>
+                {% endif %}
+
+                <p class="card-text">{{ film.kp_link }}</p>
+                <p class="card-text">{{ film.kp_rating }}</p>
+                <p class="card-text">{{ film.kp_votes }}</p>
+
+                <p class="card-text">{{ film.short_desc }}</p>
                 <p class="card-text">
-                  {{ film.genre }}
-                </p>
-                <p class="card-text">
-                  Режиссер: {{ film.director }}
-                </p>
-                <p class="card-text">
-                  Рейтинг Афиши: {{ film.afisha_rating }}
-                </p>
-                <p class="card-text">
-                  <a href="https://www.afisha.ru{{ film.afisha_link }}" target="_blank">Афиша</a>
-                </p>
-                <p class="card-text">
-                  {{ film.desc_start }}
                   <div class="collapse" id="collapseDesc{{ loop.index }}">
-                    {{ film.desc_all }}
+                    {{ film.description }}
                   </div>
-                  <a data-toggle="collapse" href="#collapseDesc{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseDesc{{ loop.index }}">
-                    Описание
-                  </a>
                 </p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                <a data-toggle="collapse" href="#collapseDesc{{ loop.index }}" role="button" aria-expanded="false" aria-controls="collapseDesc{{ loop.index }}">
+                  Описание
+                </a>
+              </div>
+              <div class="card-footer">
+                <a href="https://www.afisha.ru{{ film.afisha_link }}" class="card-link" target=""_blank">Афиша</a>
               </div>
             </div>
           {% endfor %}
