@@ -5,7 +5,7 @@ import threading
 import time
 
 
-SLEEP_DELAY = 3000
+SLEEP_DELAY = 30
 
 
 app = Flask(__name__)

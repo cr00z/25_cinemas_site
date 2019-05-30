@@ -154,7 +154,7 @@ def parse_kinopoisk_info(movie_title, proxies_pool, cache):
         proxies_pool,
         cache
     ) or (0, 0)
-    cache.set('{}'.format(movie_title), {
+    cache.set(movie_title, {
         'kp_link': movie_url,
         'kp_rating': movie_rating[0],
         'kp_votes': movie_rating[1]
