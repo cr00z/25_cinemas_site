@@ -3,16 +3,23 @@ from werkzeug.contrib.cache import FileSystemCache
 import cinemas
 import threading
 import time
+import sys
 
 
-SLEEP_DELAY = 30
+SLEEP_DELAY = 60
 
 
+sys.setrecursionlimit(10000)
 app = Flask(__name__)
-cache = FileSystemCache('cache', default_timeout=3600)
+cache = FileSystemCache('cinemas_cache')
 
 
 @app.route('/')
+def films_stub():
+    return '<meta http-equiv="refresh" content="1;http://127.0.0.1:5000/films">111'
+
+
+@app.route('/films')
 def films_list():
     movies_list = cinemas.get_afisha_list(cache)
     cinemas.start_kinopoisk_parser(

@@ -38,6 +38,7 @@ def parse_afisha_list(raw_html):
     afisha_list = []
     for film_meta in film_tags:
         afisha_rating = film_meta.parent.parent.findNext('div', 'card__actions').div.string
+        print(afisha_rating)
         try:
             afisha_rating = float(afisha_rating)
         except ValueError:
@@ -57,12 +58,13 @@ def parse_afisha_list(raw_html):
 
 
 def get_afisha_list(cache):
-    afisha_list = None #cache.get('afisha-list') # TODO:
+    afisha_list = cache.get('afisha-list')
+    print(afisha_list)
     if afisha_list is None:
         afisha_list = parse_afisha_list(
             fetch_page(AFISHA)
         )
-        #cache.set('afisha-list', afisha_list)
+        cache.set('afisha-list', afisha_list, timeout=3600)
     return afisha_list
 
 
@@ -146,13 +148,11 @@ def parse_kinopoisk_info(movie_title, proxies_pool, cache):
         parse_kinopoisk_movie_url,
         movie_title,
         proxies_pool,
-        cache
     )
     movie_rating = parse_kinopoisk_info_callback(
         parse_kinopoisk_movie_rating,
         movie_url,
         proxies_pool,
-        cache
     ) or (0, 0)
     cache.set(movie_title, {
         'kp_link': movie_url,
