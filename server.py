@@ -6,7 +6,7 @@ import time
 import sys
 
 
-SLEEP_DELAY = 60
+SLEEP_DELAY = 25
 
 
 sys.setrecursionlimit(10000)
