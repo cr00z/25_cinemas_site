@@ -116,7 +116,7 @@ def parse_kinopoisk_movie_url(movie_title, proxy):
     try:
         data_url = kp_soup.find('a', {'class': 'js-serp-metrika'})['data-url']
         return re.search(r'film/\d*', data_url)[0]
-    except AttributeError:
+    except (TypeError, AttributeError):
         return None
 
 
