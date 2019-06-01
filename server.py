@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from werkzeug.contrib.cache import FileSystemCache
 import cinemas
 import threading
@@ -16,7 +16,7 @@ cache = FileSystemCache('cinemas_cache')
 
 @app.route('/')
 def films_stub():
-    return '<meta http-equiv="refresh" content="1;http://127.0.0.1:5000/films">111'
+    return render_template('redirect.html', sleep_delay=SLEEP_DELAY)
 
 
 @app.route('/films')

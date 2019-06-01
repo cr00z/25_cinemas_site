@@ -75,7 +75,7 @@ def get_proxies_list(cache):
             FREEPROXY_API_URL,
             FREEPROXY_API_PARAMS
         ).decode('utf-8').split('\n')
-        cache.set('proxies-list', proxies_list)
+        cache.set('proxies-list', proxies_list, timeout=3600)
     return proxies_list
 
 
@@ -154,11 +154,15 @@ def parse_kinopoisk_info(movie_title, proxies_pool, cache):
         movie_url,
         proxies_pool,
     ) or (0, 0)
-    cache.set(movie_title, {
-        'kp_link': movie_url,
-        'kp_rating': movie_rating[0],
-        'kp_votes': movie_rating[1]
-    })
+    cache.set(
+        movie_title,
+        {
+            'kp_link': movie_url,
+            'kp_rating': movie_rating[0],
+            'kp_votes': movie_rating[1]
+        },
+        timeout=3600
+    )
 
 
 def start_kinopoisk_parser(cache, movies_list):

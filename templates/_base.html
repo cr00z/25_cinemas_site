@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru" class="h-100">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -7,24 +7,32 @@
     {% block redirect %}{% endblock %}
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      .footer {
+        background-color: #f5f5f5;
+      }
+      .footer > .container {
+        padding-right: 15px;
+        padding-left: 15px;
+      }
+    </style>
     <title>Что в кино</title>
   </head>
-  <body>
+  <body class="d-flex flex-column h-100">
+    <header>
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" href="/">&#x1F4F9; Что в кино</a>
+      </nav>
+    </header>
 
-    <nav class="navbar navbar-light bg-light">
-      <a class="navbar-brand" href="/">&#x1F4F9; Что в кино</a>
-    </nav>
-
-{% block content %}{% endblock %}
-
-    <div class="container-fluid bg-light">
-      <div class="row">
-        <div class="col">
-          <p class="mt-3">Настоящий сайт создан исключительно в учебных целях. Все сведения о фильмах взяты с сайтов <a href="https://www.afisha.ru/">Афиша</a> и <a href="https://www.kinopoisk.ru/">Кинопоиск</a>.</p>
-        </div>
+    <!-- Begin page content -->
+    {% block content %}{% endblock %}
+    
+    <footer class="footer mt-auto py-3">
+      <div class="container">
+        <span class="text-muted">Настоящий сайт создан исключительно в учебных целях. Все сведения о фильмах взяты с сайтов <a href="https://www.afisha.ru/">Афиша</a> и <a href="https://www.kinopoisk.ru/">Кинопоиск</a>.</span>
       </div>
-    </div>
-
+    </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
