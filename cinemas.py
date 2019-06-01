@@ -181,4 +181,5 @@ def start_kinopoisk_parser(cache, movies_list):
                 get_proxies_list(cache),
                 cache
             ))
+            thread.daemon = True
             thread.start()

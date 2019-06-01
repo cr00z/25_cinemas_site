@@ -6,7 +6,7 @@ import time
 import sys
 
 
-SLEEP_DELAY = 25
+SLEEP_DELAY = 25    # 30 sec heroku limit
 
 
 sys.setrecursionlimit(10000)
