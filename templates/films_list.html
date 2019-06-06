@@ -1,5 +1,10 @@
 ﻿{% extends "_base.html" %}
 {% block content %}
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      Что-то пошло не так! Попробуйте еще раз или обратитесь к <a href="mailto:recycle_bin@cinemasa.herokuapp.com">администратору</a>.
+    </div>
+  {% endif %}
   <div class="container my-4">
     <div class="row">
       {% for film in movies_list %}

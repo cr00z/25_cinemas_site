@@ -15,13 +15,15 @@ KINOPOISK_SEARCH = '{}index.php'.format(KINOPOISK)
 def fetch_page(url, params=None, proxy=None):
     proxy_timeout = 10
     try:
-        return requests.get(
+        response = requests.get(
             url,
             params=params,
             headers={'User-agent': str(UserAgent().random)},
             proxies={'https': 'https://{}'.format(proxy)} if proxy else None,
             timeout=proxy_timeout
-        ).content
+        )
+        response.raise_for_status()
+        return response.content
     except requests.exceptions.RequestException:
         return None
 
@@ -60,14 +62,17 @@ def parse_afisha_movie(film_meta):
 def parse_afisha_list(raw_html):
     items_skip = 2
     items_limit = 10
-    film_tags = BeautifulSoup(raw_html, 'lxml').find_all(
-        'meta',
-        itemprop='name',
-        limit=items_skip+items_limit   # find 12 tags
-    )[items_skip:]                     # and skip 1st and 2nd
-    return [parse_afisha_movie(film_meta) for film_meta in film_tags]
+    try:
+        film_tags = BeautifulSoup(raw_html, 'lxml').find_all(
+            'meta',
+            itemprop='name',
+            limit=items_skip+items_limit   # find 12 tags
+        )[items_skip:]                     # and skip 1st and 2nd
+        return [parse_afisha_movie(film_meta) for film_meta in film_tags]
+    except TypeError:
+        return None
 
-
+        
 def get_afisha_list(cache):
     afisha_list = cache.get('afisha-list')
     if afisha_list is None:
