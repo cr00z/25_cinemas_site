@@ -14,15 +14,19 @@ app = Flask(__name__)
 cache = FileSystemCache('cinemas_cache')
 
 
-def sleep_while_threads_works(seconds):
+def sleep_while_threads_works_or_timeout(seconds):
     for count in range(seconds):
         if threading.active_count() == 0:
             break
         time.sleep(1)
 
 
-def get_kinopoisk_info(movie_name):
-    return cache.get(movie['name'])
+def add_kinopoisk_info(movies_list):
+    for movie_id, movie in enumerate(movies_list):
+        kinopoisk_info = cache.get(movie['name'])
+        if kinopoisk_info is None:
+            kinopoisk_info = dict.fromkeys(['kp_link', 'kp_rating', 'kp_votes'])
+        movies_list[movie_id].update(kinopoisk_info)
 
 
 @app.route('/')
@@ -37,12 +41,8 @@ def films_list():
         return render_template('films_list.html', error=True)
     movies_names = [movie['name'] for movie in movies_list]
     cinemas.start_kinopoisk_parser(cache, movies_names)
-    sleep_while_threads_works(SLEEP_DELAY)
-    for movie_id, movie in enumerate(movies_list):
-        kinopoisk_info = get_kinopoisk_info(movie['name'])
-        if kinopoisk_info is None:
-            kinopoisk_info = dict.fromkeys(['kp_link', 'kp_rating', 'kp_votes'])
-        movies_list[movie_id].update(kinopoisk_info)
+    sleep_while_threads_works_or_timeout(SLEEP_DELAY)
+    add_kinopoisk_info(movies_list)
     return render_template('films_list.html', movies_list=movies_list)
 
 
