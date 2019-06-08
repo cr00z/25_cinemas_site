@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+п»їfrom flask import Flask, render_template, url_for
 from werkzeug.contrib.cache import FileSystemCache
 from concurrent.futures import ThreadPoolExecutor
 from threading import active_count
@@ -8,10 +8,11 @@ import cinemas
 
 
 '''
-Не получается корректно реализовать ThreadPoolExecutor.
-Потоки блокируют основной поток до своего завершения и пользователь не получает вывод.
-Для Thread есть костыль thread.daemon, а тут не получается.
-Что можно сделать?
+РќРµ РїРѕР»СѓС‡Р°РµС‚СЃСЏ РєРѕСЂСЂРµРєС‚РЅРѕ СЂРµР°Р»РёР·РѕРІР°С‚СЊ ThreadPoolExecutor.
+РџРѕС‚РѕРєРё Р±Р»РѕРєРёСЂСѓСЋС‚ РѕСЃРЅРѕРІРЅРѕР№ РїРѕС‚РѕРє РґРѕ СЃРІРѕРµРіРѕ Р·Р°РІРµСЂС€РµРЅРёСЏ Рё РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РЅРµ РїРѕР»СѓС‡Р°РµС‚ РІС‹РІРѕРґ.
+Р”Р»СЏ Thread РµСЃС‚СЊ РєРѕСЃС‚С‹Р»СЊ thread.daemon, Р° С‚СѓС‚ РЅРµ РїРѕР»СѓС‡Р°РµС‚СЃСЏ.
++ heroku РЅР°РєР»Р°РґС‹РІР°РµС‚ РѕРіСЂР°РЅРёС‡РµРЅРёРµ РЅР° СЂР°Р±РѕС‚Сѓ С‚СЂРµРґРѕРІ РІ 30 СЃРµРєСѓРЅРґ
+Р§С‚Рѕ РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ?
 '''
 
 
