@@ -28,24 +28,28 @@
                 {% endfor %}
               </p>
               <p class="card-text"><small class="text-muted">Режиссер: {{ film.directors|join(', ') }}</small></p>
-              <p class="card-text">{{ film.verdict }}</p>
+              {% if film.verdict %}
+                <p class="card-text">{{ film.verdict }}</p>
+              {% endif %}
               {% if film.afisha_rating %}
                 <p class="card-text">Рейтинг Афиши: <span class="badge badge-pill badge-success">{{ film.afisha_rating }}</span></p>
               {% endif %}
-              {% if film.kp_rating %}
-                <p class="card-text">Рейтинг Кинопоиска: <span class="badge badge-pill badge-success">{{ film.kp_rating }} / {{ film.kp_votes }}</span></p>
+              {% if film.kp_rates %}
+                <p class="card-text">Рейтинг Кинопоиска: <span class="badge badge-pill badge-success">{{ film.kp_rates[0] }} / {{ film.kp_rates[1] }}</span></p>
               {% endif %}
-              <p class="card-text">
-                <div class="collapse" id="collapseDesc{{ loop.index }}">
-                  {{ film.description }}
-                </div>
-              </p>
-              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#collapseDesc{{ loop.index }}" aria-expanded="false" aria-controls="collapseDesc{{ loop.index }}">Описание</button>
+              {% if film.description %}
+                <p class="card-text">
+                  <div class="collapse" id="collapseDesc{{ loop.index }}">
+                    {{ film.description }}
+                  </div>
+                </p>
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#collapseDesc{{ loop.index }}" aria-expanded="false" aria-controls="collapseDesc{{ loop.index }}">Описание</button>
+              {% endif %}
             </div>
             <div class="card-footer">
               <a href="https://www.afisha.ru{{ film.afisha_url }}" class="card-link" target="_blank">Афиша</a>
-                {% if film.kp_link %}
-                  <a href="https://www.kinopoisk.ru/{{ film.kp_link }}" class="card-link" target="_blank">Кинопоиск</a>
+                {% if film.kp_url %}
+                  <a href="https://www.kinopoisk.ru/{{ film.kp_url }}" class="card-link" target="_blank">Кинопоиск</a>
                 {% endif %}
             </div>
           </div>
