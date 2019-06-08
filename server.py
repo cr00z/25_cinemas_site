@@ -7,6 +7,14 @@ import sys
 import cinemas
 
 
+'''
+Не получается корректно реализовать ThreadPoolExecutor.
+Потоки блокируют основной поток до своего завершения и пользователь не получает вывод.
+Для Thread есть костыль thread.daemon, а тут не получается.
+Что можно сделать?
+'''
+
+
 SLEEP_DELAY = 25    # for 30 sec heroku limit
 
 
