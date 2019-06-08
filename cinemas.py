@@ -150,7 +150,6 @@ def get_kinopoisk_movie_url(movie_name, proxies_pool, cache):
             movie_name,
             proxies_pool,
         )
-        print('movie url for {}: {}'.format(movie_name, movie_url))
         cache.set('{}_url'.format(movie_name), movie_url, timeout=3600)
     return movie_url
 
@@ -163,7 +162,6 @@ def get_kinopoisk_movie_rates(movie_name, movie_url, proxies_pool, cache):
             movie_url,
             proxies_pool,
         )
-        print('movie rates for {}: {}'.format(movie_name, movie_rates))
         cache.set('{}_rates'.format(movie_name), movie_rates, timeout=3600)
     return movie_rates
 
@@ -171,6 +169,7 @@ def get_kinopoisk_movie_rates(movie_name, movie_url, proxies_pool, cache):
 def parse_kinopoisk_info(movie_name, proxies_pool, cache):
     movie_url = get_kinopoisk_movie_url(movie_name, proxies_pool, cache)
     movie_rates = get_kinopoisk_movie_rates(movie_name, movie_url, proxies_pool, cache)
+    return '{} finished'.format(movie_name)
 
 
 if __name__ == "__main__":

@@ -1,35 +1,38 @@
 from flask import Flask, render_template, url_for
 from werkzeug.contrib.cache import FileSystemCache
-import cinemas
-from threading import Thread, active_count
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import active_count
 import time
 import sys
+import cinemas
 
 
-SLEEP_DELAY = 25    # 30 sec heroku limit
+SLEEP_DELAY = 25    # for 30 sec heroku limit
 
 
 sys.setrecursionlimit(10000)
 app = Flask(__name__)
 cache = FileSystemCache('cinemas_cache')
+thread_results = []
 
 
 def start_kinopoisk_parser(movies_names):
     proxies_list = cinemas.get_proxies_list(cache)
     if proxies_list is None:
         return None
-    for movie_name in movies_names:
-        thread = Thread(
-            target=cinemas.parse_kinopoisk_info,
-            args=(movie_name, proxies_list, cache)
-        )
-        thread.daemon = True
-        thread.start()
+    with ThreadPoolExecutor() as pool:
+        for movie_name in movies_names:
+            thread_results.append(pool.submit(
+                cinemas.parse_kinopoisk_info,
+                movie_name,
+                proxies_list,
+                cache 
+            ))
 
 
 def sleep_while_threads_works_or_timeout(seconds):
     for count in range(seconds):
-        if active_count() == 0:
+        if active_count() == 1:
             break
         time.sleep(1)
 
