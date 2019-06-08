@@ -1,6 +1,6 @@
 from flask import Flask, render_template, url_for
 from werkzeug.contrib.cache import FileSystemCache
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from threading import active_count
 import time
 import sys
@@ -30,13 +30,6 @@ def start_kinopoisk_parser(movies_names):
             ))
 
 
-def sleep_while_threads_works_or_timeout(seconds):
-    for count in range(seconds):
-        if active_count() == 1:
-            break
-        time.sleep(1)
-
-
 def add_kinopoisk_info(movies_list):
     for movie_id, movie in enumerate(movies_list):
         movies_list[movie_id]['kp_url'] = cache.get('{}_url'.format(movie['name']))
@@ -55,7 +48,6 @@ def films_list():
         return render_template('films_list.html', error=True)
     movies_names = [movie['name'] for movie in movies_list]
     start_kinopoisk_parser(movies_names)
-    sleep_while_threads_works_or_timeout(SLEEP_DELAY)
     add_kinopoisk_info(movies_list)
     return render_template('films_list.html', movies_list=movies_list)
 
