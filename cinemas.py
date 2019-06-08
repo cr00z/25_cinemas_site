@@ -3,7 +3,9 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from threading import Thread
 import re
-
+import string
+import json
+ 
 
 AFISHA = 'https://www.afisha.ru/msk/schedule_cinema/'
 FREEPROXY_API_URL = 'http://www.freeproxy-list.ru/api/proxy'
@@ -28,52 +30,33 @@ def fetch_page(url, params=None, proxy=None):
         return None
 
 
-def parse_afisha_movie(film_meta):
-    def get_content(field):
-        try:
-            return field['content']
-        except KeyError:
-            return None
-
-    def get_float(float_candidate):
-        try:
-            return float(float_candidate)
-        except ValueError:
-            return None
-
+def parse_afisha_movie(film_info):
     return {
-        'name': get_content(film_meta),
-        'image': get_content(film_meta.findNext('meta', itemprop='image')),
-        'director': get_content(
-            film_meta.findNext('meta', itemprop='director')
-        ),
-        'description': get_content(
-            film_meta.findNext('meta', itemprop='description')
-        ),
-        'afisha_link': film_meta.findNext('a')['href'],
-        'genre': film_meta.findNext('span').string,
-        'short_desc': film_meta.parent.findNext('p').string,
-        'afisha_rating': get_float(
-            film_meta.parent.parent.findNext('div', 'card__actions').div.string
-        )
+        'poster_url': film_info['Poster']['Url'],
+        'year': film_info['ProductionYear'],
+        'country': film_info['Country'],
+        'genres': [genre['Name'] for genre in film_info['Genres']['Links']],
+        'directors': [director['Name'] for director in film_info['Directors']['Links']],
+        'orig_name': film_info['OriginalName'],
+        'duration': film_info['Duration'],
+        'age_restriction': film_info['AgeRestriction'],
+        'afisha_rating': film_info['Rating'],
+        'name': film_info['Name'],
+        'afisha_url': film_info['Url'],
+        'verdict': film_info['Verdict'],
+        'description': film_info['Description']
     }
 
 
 def parse_afisha_list(raw_html):
-    items_skip = 2
-    items_limit = 10
-#    try:
-    film_tags = BeautifulSoup(raw_html, 'lxml').find_all(
-        'meta',
-        itemprop='name',
-        limit=items_skip+items_limit   # find 12 tags
-    )[items_skip:]                     # and skip 1st and 2nd
-    print(film_tags)
-    return [parse_afisha_movie(film_meta) for film_meta in film_tags]
-#    except TypeError:
-#        return None
+    html_str = raw_html.decode("utf-8")
+    start_pos = html_str.find('JsonLogger,') + len('JsonLogger,')
+    end_pos = html_str.find('),document.getElementById', start_pos)
+    afisha_list = json.loads(html_str[start_pos:end_pos])
+    afisha_list = afisha_list['ScheduleWidget']['Items']
+    return [parse_afisha_movie(movie_info) for movie_info in afisha_list]
 
-        
+
 def get_afisha_list(cache):
     afisha_list = cache.get('afisha-list')
     if afisha_list is None:
@@ -189,3 +172,7 @@ def start_kinopoisk_parser(cache, movies_list):
             ))
             thread.daemon = True
             thread.start()
+
+
+if __name__ == "__main__":
+    pass

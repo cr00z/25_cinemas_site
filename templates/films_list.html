@@ -10,18 +10,31 @@
       {% for film in movies_list %}
         <div class="col-12 col-md-6 col-xl-4">
           <div class="card mb-3" style="max-width: 540px;">
-            <img src="{{ film.image }}" class="card-img-top" alt="{{ film.name }}">
+            <img src="{{ film.poster_url }}" class="card-img-top" alt="{{ film.name }}">
             <div class="card-body">
-              <h5 class="card-title">{{ film.name }}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{{ film.genre }}</h6>
-              <p class="card-text"><small class="text-muted">Режиссер: {{ film.director }}</small></p>
-                {% if film.afisha_rating %}
-                  <p class="card-text">Рейтинг Афиши: {{ film.afisha_rating }}</p>
+              <h5 class="card-title">
+                {{ film.name }}
+                {% if film.orig_name %}
+                  ({{ film.orig_name }})
                 {% endif %}
-                {% if film.kp_rating %}
-                  <p class="card-text">Рейтинг Кинопоиска: {{ film.kp_rating }} / {{ film.kp_votes }}</p>
-                {% endif %}
-              <p class="card-text">{{ film.short_desc }}</p>
+              </h5>
+              <p class="card-text">
+                {{ film.duration }}, {{ film.country }}, {{ film.year }}
+                <span class="badge badge-danger">{{ film.age_restriction }}</span>
+              </p>
+              <p class="card-text">
+                {% for genre in film.genres %}
+                  <span class="badge badge-info">{{ genre }}</span>
+                {% endfor %}
+              </p>
+              <p class="card-text"><small class="text-muted">Режиссер: {{ film.directors|join(', ') }}</small></p>
+              <p class="card-text">{{ film.verdict }}</p>
+              {% if film.afisha_rating %}
+                <p class="card-text">Рейтинг Афиши: <span class="badge badge-pill badge-success">{{ film.afisha_rating }}</span></p>
+              {% endif %}
+              {% if film.kp_rating %}
+                <p class="card-text">Рейтинг Кинопоиска: <span class="badge badge-pill badge-success">{{ film.kp_rating }} / {{ film.kp_votes }}</span></p>
+              {% endif %}
               <p class="card-text">
                 <div class="collapse" id="collapseDesc{{ loop.index }}">
                   {{ film.description }}
@@ -30,7 +43,7 @@
               <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#collapseDesc{{ loop.index }}" aria-expanded="false" aria-controls="collapseDesc{{ loop.index }}">Описание</button>
             </div>
             <div class="card-footer">
-              <a href="https://www.afisha.ru{{ film.afisha_link }}" class="card-link" target="_blank">Афиша</a>
+              <a href="https://www.afisha.ru{{ film.afisha_url }}" class="card-link" target="_blank">Афиша</a>
                 {% if film.kp_link %}
                   <a href="https://www.kinopoisk.ru/{{ film.kp_link }}" class="card-link" target="_blank">Кинопоиск</a>
                 {% endif %}
