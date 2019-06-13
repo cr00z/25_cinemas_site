@@ -6,7 +6,6 @@ It includes title, genre, director, simple description of ten top films and show
 
 Project uses:
 * [flask](https://pypi.org/project/flask/0.11.1/)
-* [Werkzeug](https://pypi.org/project/werkzeug/0.15.2)
 * [requests](https://pypi.org/project/requests/2.11.1)
 * [fake-useragent](https://pypi.org/project/fake-useragent/0.1.11)
 * [lxml](https://pypi.org/project/lxml/4.3.3)

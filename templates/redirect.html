@@ -1,6 +1,6 @@
 ﻿{% extends "_base.html" %}
 {% block redirect %}
-<meta http-equiv="refresh" content="0;{{ url_for('films_list') }}">
+<meta http-equiv="refresh" content="{{ sleep_delay }};{{ url_for('films_list') }}">
 {% endblock %}
 {% block content %}
   <div class="container h-100">

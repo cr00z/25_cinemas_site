@@ -1,10 +1,9 @@
-﻿import requests
+import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 import re
-import string
 import json
- 
+
 
 AFISHA = 'https://www.afisha.ru/msk/schedule_cinema/'
 FREEPROXY_API_URL = 'http://www.freeproxy-list.ru/api/proxy'
@@ -58,24 +57,11 @@ def parse_afisha_list(raw_html):
     return [parse_afisha_movie(movie_info) for movie_info in afisha_list]
 
 
-def get_afisha_list(cache):
-    afisha_list = cache.get('afisha-list')
-    if afisha_list is None:
-        afisha_list = parse_afisha_list(fetch_page(AFISHA))
-        cache.set('afisha-list', afisha_list, timeout=3600)
-    return afisha_list
-
-
-def get_proxies_list(cache):
-    proxies_list = cache.get('proxies-list')
-    if proxies_list is None:
-        proxies_list = fetch_page(
-            FREEPROXY_API_URL,
-            FREEPROXY_API_PARAMS
-        ).decode('utf-8').split('\n')
-    if proxies_list is not None:
-        cache.set('proxies-list', proxies_list, timeout=3600)
-    return proxies_list
+def get_proxies_list():
+    return fetch_page(
+        FREEPROXY_API_URL,
+        FREEPROXY_API_PARAMS
+    ).decode('utf-8').split('\n')
 
 
 def get_soup(raw_html):
@@ -140,36 +126,6 @@ def parse_kinopoisk_info_callback(callback_func, url, proxies_pool):
         return_value = callback_func(url, proxy)
         if return_value:
             return return_value
-
-
-def get_kinopoisk_movie_url(movie_name, proxies_pool, cache):
-    movie_url = cache.get('{}_url'.format(movie_name))
-    if movie_url is None:
-        movie_url = parse_kinopoisk_info_callback(
-            parse_kinopoisk_movie_url,
-            movie_name,
-            proxies_pool,
-        )
-        cache.set('{}_url'.format(movie_name), movie_url, timeout=3600)
-    return movie_url
-
-
-def get_kinopoisk_movie_rates(movie_name, movie_url, proxies_pool, cache):
-    movie_rates = cache.get('{}_rates'.format(movie_name))
-    if movie_rates is None:
-        movie_rates = parse_kinopoisk_info_callback(
-            parse_kinopoisk_movie_rating,
-            movie_url,
-            proxies_pool,
-        )
-        cache.set('{}_rates'.format(movie_name), movie_rates, timeout=3600)
-    return movie_rates
-
-
-def parse_kinopoisk_info(movie_name, proxies_pool, cache):
-    movie_url = get_kinopoisk_movie_url(movie_name, proxies_pool, cache)
-    movie_rates = get_kinopoisk_movie_rates(movie_name, movie_url, proxies_pool, cache)
-    return '{} finished'.format(movie_name)
 
 
 if __name__ == "__main__":
